@@ -46,8 +46,8 @@ public class CharacterMoveController : MonoBehaviour, GameInputAction.IFpsAction
         var verticalVector = transform.forward * (_moveActionValue.y * Time.deltaTime * characterMoveSpeed);
         //var horiaontalVector = transform.right * (_moveActionValue.x * Time.deltaTime * characterMoveSpeed);
         //characterRotate = characterRotate + _moveActionValue.x;
-        transform.Rotate(new Vector3(x: 0, y: _moveActionValue.x * 3, z: 0));
-        _characterController.Move(verticalVector);
+        transform.Rotate(new Vector3(x: 0, y: _moveActionValue.x * 1.5f, z: 0));
+        _characterController.Move(verticalVector * 0.5f);
 
         _fallingSpeed = _fallingSpeed - Time.deltaTime * gravity;
         _characterController.Move(motion: new Vector3(x: 0, y: _fallingSpeed, z: 0));
