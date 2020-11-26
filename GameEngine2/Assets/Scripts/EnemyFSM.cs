@@ -62,10 +62,10 @@ public class EnemyFSM : MonoBehaviour
                 Return();
                 break;
             case EnemyState.Damaged:
-                Damaged();
+                //Damaged();
                 break;
             case EnemyState.Die:
-                Die();
+                //Die();
                 break;
         }
     }
@@ -75,7 +75,6 @@ public class EnemyFSM : MonoBehaviour
         if (Vector3.Distance(player.transform.position, transform.position) <= findDistance)
         {
             enemyState = EnemyState.Move;
-            print("상태 전환: Idle->Move");
         }
     }
 
@@ -84,20 +83,16 @@ public class EnemyFSM : MonoBehaviour
         if (Vector3.Distance(originPos, transform.position) > moveDistance)
         {
             enemyState = EnemyState.Return;
-            print("상태 전환: Move->Return");
         }
 
         else if (Vector3.Distance(player.transform.position, transform.position) > attackDistance)
         {
             Vector3 dir = (player.transform.position - transform.position).normalized;
-
             cc.Move(dir * moveSpeed * Time.deltaTime);
         }
         else
         {
             enemyState = EnemyState.Attack;
-            print("상태 전환: Move->Attack");
-
             currentTime = attackDelayTime;
         }
     }
@@ -110,18 +105,15 @@ public class EnemyFSM : MonoBehaviour
             if (currentTime >= attackDelayTime)
             {
                 currentTime = 0;
-                print("공격");
                 PlayerMove pm = player.GetComponent<PlayerMove>();
                 pm.OnDamage(attackPower);
             }
             else
                 currentTime += Time.deltaTime;
-
         }
         else
         {
             enemyState = EnemyState.Move;
-            print("상태 전환: Attack->Move");
         }
     }
 
@@ -136,35 +128,52 @@ public class EnemyFSM : MonoBehaviour
         {
             transform.position = originPos;
             enemyState = EnemyState.Idle;
-            print("상태 전환: Return->Idle");
-
             currentHp = maxHp;
         }
     }
 
     void Damaged()
     {
+        StartCoroutine(DamageProcess());
+    }
 
+    IEnumerator DamageProcess()
+    {
+        yield return new WaitForSeconds(2f);
+        enemyState = EnemyState.Move;
     }
 
     void Die()
     {
+        StopAllCoroutines();
+        StartCoroutine(DieProcess());
+    }
 
+    IEnumerator DieProcess()
+    {
+        cc.enabled = false;
+
+        yield return new WaitForSeconds(2f);
+        Destroy(gameObject);
     }
 
     public void HitEnemy(int value)
     {
+        if (enemyState == EnemyState.Damaged || enemyState == EnemyState.Die || enemyState == EnemyState.Return)
+        {
+            return;
+        }
         currentHp -= value;
 
         if (currentHp > 0)
         {
             enemyState = EnemyState.Damaged;
-            print("상태 전환: state->Damaged");
+            Damaged();
         }
         else
         {
             enemyState = EnemyState.Die;
-            print("상태 전환: ->die");
+            Die();
         }
     }
 
