@@ -7,7 +7,7 @@ public class PlayerMove : MonoBehaviour
     CharacterController cc;
 
     public float moveSpeed = 7f;
-    float rotateSpeed = 120f;
+    float rotateSpeed = 140f;
     public float jumpPower = 1f;
     public float yVelocity = 0;
     float gravity = -20f;
