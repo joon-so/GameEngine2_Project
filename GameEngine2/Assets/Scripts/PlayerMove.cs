@@ -7,6 +7,7 @@ public class PlayerMove : MonoBehaviour
     CharacterController cc;
 
     public float moveSpeed = 7f;
+    float rotateSpeed = 120f;
     public float jumpPower = 1f;
     public float yVelocity = 0;
     float gravity = -20f;
@@ -46,7 +47,9 @@ public class PlayerMove : MonoBehaviour
         yVelocity += gravity * Time.deltaTime;
         dir.y = yVelocity;
 
-        cc.Move(dir * moveSpeed * Time.deltaTime);
+        transform.Rotate(new Vector3(0, h, 0) * rotateSpeed * Time.deltaTime);
+        cc.Move(transform.forward * dir.z * moveSpeed * Time.deltaTime);
+        cc.Move(transform.up * dir.y * moveSpeed * Time.deltaTime);
     }
 
     public void OnDamage(int value)
