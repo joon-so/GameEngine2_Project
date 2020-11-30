@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerFire : MonoBehaviour
 {
     AudioSource aSource;
-    
+    Animator anim;
+
     // 발사 위치
     public Transform firePosition;
     public int attackPower = 2;
@@ -16,6 +17,7 @@ public class PlayerFire : MonoBehaviour
         firePosition = GetComponent<Transform>();
         //ps = bulletEffect.GetComponent<ParticleSystem>();
         //aSource = GetComponent<AudioSource>();
+        anim = transform.GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -38,6 +40,8 @@ public class PlayerFire : MonoBehaviour
                 //bulletEffect.transform.position = hitInfo.point;
                 //bulletEffect.transform.foward = hitInfo.normal;
                 //ps.Play();
+                anim.SetBool("Aiming", true);
+                anim.SetTrigger("Attack");
             }
         }
         //aSource.Play();

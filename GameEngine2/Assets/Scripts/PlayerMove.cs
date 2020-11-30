@@ -5,12 +5,13 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     CharacterController cc;
+    Animator anim;
 
     public float moveSpeed = 7f;
     float rotateSpeed = 140f;
     public float jumpPower = 1f;
     public float yVelocity = 0;
-    float gravity = -20f;
+    float gravity = -9.8f;
     public int maxJump = 1;
     int jumpCount = 0;
 
@@ -21,6 +22,7 @@ public class PlayerMove : MonoBehaviour
     void Start()
     {
         cc = GetComponent<CharacterController>();
+        anim = transform.GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -42,6 +44,7 @@ public class PlayerMove : MonoBehaviour
         {
             jumpCount++;
             yVelocity = jumpPower;
+            anim.SetTrigger("Jump");
         }
 
         yVelocity += gravity * Time.deltaTime;
@@ -50,6 +53,10 @@ public class PlayerMove : MonoBehaviour
         transform.Rotate(new Vector3(0, h, 0) * rotateSpeed * Time.deltaTime);
         cc.Move(transform.forward * dir.z * moveSpeed * Time.deltaTime);
         cc.Move(transform.up * dir.y * moveSpeed * Time.deltaTime);
+
+        //anim.SetFloat("Speed", moveSpeed);
+        //anim.SetBool("Aiming", true);
+        //anim.SetTrigger("Attack");
     }
 
     public void OnDamage(int value)
