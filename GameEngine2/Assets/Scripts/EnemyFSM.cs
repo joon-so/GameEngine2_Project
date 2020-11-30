@@ -21,6 +21,7 @@ public class EnemyFSM : MonoBehaviour
     GameObject player;
     
     CharacterController cc;
+    Animator anim;
 
     public float findDistance = 8f;
     public float attackDistance = 2f;
@@ -30,6 +31,7 @@ public class EnemyFSM : MonoBehaviour
     public int attackPower = 2;
     public int maxHp = 5;
     int currentHp;
+    float attackCooltime = 1.0f;
     // 초기 위치 저장
     Vector3 originPos;
     // 이동 가능한 거리
@@ -41,6 +43,7 @@ public class EnemyFSM : MonoBehaviour
         enemyState = EnemyState.Idle;
         player = GameObject.Find("Player");
         cc = GetComponent<CharacterController>();
+        anim = GetComponentInChildren<Animator>();
         originPos = transform.position;
         currentHp = maxHp;
     }
@@ -82,18 +85,22 @@ public class EnemyFSM : MonoBehaviour
     {
         if (Vector3.Distance(originPos, transform.position) > moveDistance)
         {
+            anim.SetBool("FindPlayer", true);
             enemyState = EnemyState.Return;
         }
 
         else if (Vector3.Distance(player.transform.position, transform.position) > attackDistance)
         {
             Vector3 dir = (player.transform.position - transform.position).normalized;
+            anim.SetBool("FindPlayer", true);
+
             cc.Move(dir * moveSpeed * Time.deltaTime);
         }
         else
         {
             enemyState = EnemyState.Attack;
             currentTime = attackDelayTime;
+            anim.SetBool("FindPlayer", true);
         }
     }
 
@@ -106,6 +113,7 @@ public class EnemyFSM : MonoBehaviour
             {
                 currentTime = 0;
                 PlayerMove pm = player.GetComponent<PlayerMove>();
+                //anim.SetTrigger("AttackPlayer");
                 pm.OnDamage(attackPower);
             }
             else

@@ -54,7 +54,10 @@ public class PlayerMove : MonoBehaviour
         cc.Move(transform.forward * dir.z * moveSpeed * Time.deltaTime);
         cc.Move(transform.up * dir.y * moveSpeed * Time.deltaTime);
 
-        //anim.SetFloat("Speed", moveSpeed);
+        if (v < 0)
+            anim.SetFloat("Speed", -v);
+        else
+            anim.SetFloat("Speed", v);
         //anim.SetBool("Aiming", true);
         //anim.SetTrigger("Attack");
     }
