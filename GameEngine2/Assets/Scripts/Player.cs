@@ -55,6 +55,7 @@ public class Player : MonoBehaviour
 
     void Trun()
     {
+
         //transform.Rotate(new Vector3(0, hAxis, 0) * rotateSpeed * Time.deltaTime);
         transform.LookAt(transform.position + moveVec);
     }
