@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -15,14 +16,16 @@ public class PlayerMove : MonoBehaviour
     public int maxJump = 1;
     int jumpCount = 0;
 
-
-    public int hp = 10;
+    int hp;
+    public int maxHp = 100;
+    public Slider hpSlider;
 
     // Start is called before the first frame update
     void Start()
     {
         cc = GetComponent<CharacterController>();
         anim = transform.GetComponentInChildren<Animator>();
+        hp = maxHp;
     }
 
     // Update is called once per frame
@@ -60,12 +63,14 @@ public class PlayerMove : MonoBehaviour
             anim.SetFloat("Speed", v);
         //anim.SetBool("Aiming", true);
         //anim.SetTrigger("Attack");
+
+        hpSlider.value = (float)hp / (float)maxHp;
     }
 
     public void OnDamage(int value)
     {
         hp -= value;
-        if (hp<0)
+        if (hp < 0)
         {
             hp = 0;
         }

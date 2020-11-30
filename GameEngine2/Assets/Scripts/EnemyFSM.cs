@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyFSM : MonoBehaviour
 {
@@ -37,6 +38,8 @@ public class EnemyFSM : MonoBehaviour
     // 이동 가능한 거리
     public float moveDistance = 20f;
 
+    public Slider hpSlider;
+
 
     void Start()
     {
@@ -71,6 +74,8 @@ public class EnemyFSM : MonoBehaviour
                 //Die();
                 break;
         }
+
+        hpSlider.value = (float)currentHp / (float)maxHp;
     }
 
     void Idle()
