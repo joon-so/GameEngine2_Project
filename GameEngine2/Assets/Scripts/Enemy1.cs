@@ -5,30 +5,39 @@ using UnityEngine;
 public class Enemy1 : MonoBehaviour
 {
     public float speed;
-    float hAxis;
-    float vAxis;
+    public float rotateSpeed;
+    public float Hp = 100f;
+    float playerDistance;
     float detectDistance = 8f;
+    float attackDistance = 6f;
 
     Vector3 moveVec;
 
+    GameObject player;
     Animator anim;
 
     void Awake()
     {
         anim = GetComponentInChildren<Animator>();
+        player = GameObject.Find("Player");
     }
 
     void Update()
     {
-        hAxis = Input.GetAxisRaw("Horizontal");
-        vAxis = Input.GetAxisRaw("Vertical");
+        playerDistance = Vector3.Distance(player.transform.position, transform.position);
+        anim.SetFloat("PlayerDistance", playerDistance);
 
-        moveVec = new Vector3(hAxis, 0, vAxis).normalized;
+        if (playerDistance > attackDistance && playerDistance < detectDistance)
+        {
+            moveVec = (player.transform.position - transform.position).normalized;
+            transform.position += moveVec * speed * Time.deltaTime;
+            transform.LookAt(transform.position + moveVec);
+        }
 
-        transform.position += moveVec * speed * Time.deltaTime;
-
-        anim.SetBool("isWork", moveVec != Vector3.zero);
-
-        transform.LookAt(transform.position + moveVec);
+        else if (playerDistance < attackDistance )
+        {
+            moveVec = (player.transform.position - transform.position).normalized;
+            transform.LookAt(transform.position + moveVec);
+        }
     }
 }
