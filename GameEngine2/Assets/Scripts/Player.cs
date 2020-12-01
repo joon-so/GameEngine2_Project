@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     bool fDown;
     bool sDown1;
     bool sDown2;
+    bool cDown;
 
     bool isJump;
     bool isFireReady;
@@ -53,6 +54,7 @@ public class Player : MonoBehaviour
         Jump();
         Swap();
         Interation();
+        Wary();
         //Attack();
     }
 
@@ -66,23 +68,32 @@ public class Player : MonoBehaviour
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
         fDown = Input.GetButtonDown("Fire1");
+        cDown = Input.GetButtonDown("Wary");
 
     }
 
     void Move()
     {
-        moveVec = new Vector3(hAxis, 0, vAxis).normalized;
+        moveVec = new Vector3(0, 0, vAxis).normalized;
 
-        transform.position += moveVec * speed * (wDown ? 1.5f : 1f) * Time.deltaTime;
+        if (vAxis == 1)
+        {
+            transform.position += transform.forward * moveVec.z * speed * (wDown ? 1.5f : 1f) * Time.deltaTime;
+            anim.SetBool("isRun", wDown);
+        }
+        else if (vAxis == -1)
+        {
+            transform.position += transform.forward * moveVec.z * speed * 1f * Time.deltaTime;
+            anim.SetBool("isRun", false);
+        }
 
-        anim.SetBool("isRun", wDown);
         anim.SetBool("isWalk", moveVec != Vector3.zero);
     }
 
     void Trun()
     {
-        //transform.Rotate(new Vector3(0, hAxis, 0) * rotateSpeed * Time.deltaTime);
-        transform.LookAt(transform.position + moveVec);
+        transform.Rotate(new Vector3(0, hAxis, 0) * rotateSpeed * Time.deltaTime);
+        //transform.LookAt(transform.position + moveVec);
     }
 
     void Jump()
@@ -190,6 +201,28 @@ public class Player : MonoBehaviour
         }
     }
 
+    void Wary()
+    {
+        anim.SetBool("isWary", cDown);
+        if (cDown)
+        {
+            moveVec = new Vector3(0, 0, vAxis).normalized;
+
+            if (vAxis == 1)
+            {
+                transform.position += transform.forward * moveVec.z * speed * (wDown ? 1.5f : 1f) * Time.deltaTime;
+                anim.SetBool("isRun", wDown);
+            }
+            else if (vAxis == -1)
+            {
+                transform.position += transform.forward * moveVec.z * speed * 1f * Time.deltaTime;
+                anim.SetBool("isRun", false);
+            }
+
+            anim.SetBool("isWalk", moveVec != Vector3.zero);
+        }
+
+    }
 
 
     //void Attack()
