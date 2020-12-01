@@ -14,17 +14,25 @@ public class Player : MonoBehaviour
 
     bool wDown;
     bool jDown;
+    bool iDown;
     bool fDown;
     bool sDown1;
     bool sDown2;
 
     bool isJump;
     bool isFireReady;
+    bool isHand;
+    bool isSwap;
 
     public GameObject[] weapons;
+    public bool[] hasWeapons;
     Rigidbody rigid;
     Animator anim;
+
+    GameObject nearObject;
     GameObject equipWeapon;
+    int equipWeaponIndex_L;
+    int equipWeaponIndex_R;
 
     Vector3 moveVec;
     
@@ -32,6 +40,9 @@ public class Player : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+
+        hasWeapons[0] = true;
+        hasWeapons[1] = true;
     }
 
     void Update()
@@ -41,7 +52,8 @@ public class Player : MonoBehaviour
         Trun();
         Jump();
         Swap();
-        Attack();
+        Interation();
+        //Attack();
     }
 
     void GetInput()
@@ -50,6 +62,7 @@ public class Player : MonoBehaviour
         vAxis = Input.GetAxisRaw("Vertical");
         wDown = Input.GetButton("Walk");
         jDown = Input.GetButtonDown("Jump");
+        iDown = Input.GetButtonDown("Interation");
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
         fDown = Input.GetButtonDown("Fire1");
@@ -68,7 +81,6 @@ public class Player : MonoBehaviour
 
     void Trun()
     {
-
         //transform.Rotate(new Vector3(0, hAxis, 0) * rotateSpeed * Time.deltaTime);
         transform.LookAt(transform.position + moveVec);
     }
@@ -85,36 +97,128 @@ public class Player : MonoBehaviour
 
     void Swap()
     {
-        int weaponIndex = 0;
-        if (sDown1) weaponIndex = 0;
-        if (sDown2) weaponIndex = 1;
+        if (sDown1 && ((!hasWeapons[0] && !hasWeapons[1]) || (equipWeaponIndex_L == 0) && equipWeaponIndex_R == 1))
+            return;
+        if (sDown2 && ((!hasWeapons[2] && !hasWeapons[3]) || (equipWeaponIndex_L == 2) && equipWeaponIndex_R == 3))
+            return; 
+     
+        int weaponIndex_L = 0;
+        int weaponIndex_R = 1;
+        if (sDown1) weaponIndex_L = 0;
+        if (sDown1) weaponIndex_R = 1;
+        if (sDown2) weaponIndex_L = 2;
+        if (sDown2) weaponIndex_R = 3;
 
-
-        if ((sDown1 || sDown2) && !isJump)
+        if ((sDown1) && !isJump && !isHand && !isSwap)
         {
             if (equipWeapon != null)
                 equipWeapon.SetActive(false);
-            equipWeapon = weapons[weaponIndex];
+            equipWeapon = weapons[weaponIndex_L + 2];
+            equipWeapon.SetActive(false);
+            equipWeapon = weapons[weaponIndex_R + 2];
+            equipWeapon.SetActive(false);
+
+            equipWeapon = weapons[weaponIndex_L];
             equipWeapon.SetActive(true);
+            equipWeapon = weapons[weaponIndex_R];
+            equipWeapon.SetActive(true);
+
+            anim.SetTrigger("doSwap");
+            isSwap = true;
+            Invoke("SwapOut", 0.1f);
+        }
+        if ((sDown2) && !isJump && !isHand && !isSwap)
+        {
+            if (equipWeapon != null)
+                equipWeapon.SetActive(false);
+            equipWeapon = weapons[weaponIndex_L - 2];
+            equipWeapon.SetActive(false);
+            equipWeapon = weapons[weaponIndex_R - 2];
+            equipWeapon.SetActive(false);
+
+            equipWeapon = weapons[weaponIndex_L];
+            equipWeapon.SetActive(true);
+            equipWeapon = weapons[weaponIndex_R];
+            equipWeapon.SetActive(true);
+
+            anim.SetTrigger("doSwap");
+            isSwap = true;
+            Invoke("SwapOut", 0.1f);
+        }
+        if ((sDown1 || sDown2) && !isJump)
+        {
+            if (equipWeapon != null)
+            {
+                equipWeapon.SetActive(false);
+            }
+            equipWeaponIndex_L = weaponIndex_L;
+            equipWeaponIndex_R = weaponIndex_R;
+            equipWeapon = weapons[weaponIndex_L];
+            equipWeapon.SetActive(true);
+            equipWeapon = weapons[weaponIndex_R];
+            equipWeapon.SetActive(true);
+
+            anim.SetTrigger("doSwap");
+            isSwap = true;
+
+            Invoke("SwapOut", 0.4f);
         }
     }
 
+    void HandOut()
+    {
+        isHand = false;
+    }
+
+    void SwapOut()
+    {
+        isSwap = false;
+    }
+
+    void Interation()
+    {
+        if(iDown && nearObject != null && !isJump)
+        {
+            if (nearObject.tag == "Weapon")
+            {
+                Item item = nearObject.GetComponent<Item>();
+                int weaponIndex = item.value;
+                hasWeapons[weaponIndex] = true;
+
+                Destroy(nearObject);
+            }
+        }
+    }
+
+
+
+    //void Attack()
+    //{
+    //    fireDelay += Time.deltaTime;
+    //    isFireReady = equipWeapon.rate < fireDelay;
+
+    //    if (fDown && isFireReady && !isJump)
+    //    {
+    //        equipWeapon.Use();
+    //        anim.SetTrigger("doFire");
+    //        fireDelay = 0;
+    //    }
+    //}
 
     private void OnCollisionEnter(Collision collision)
     {
         isJump = false;
     }
 
-    void Attack()
+    private void OnTriggerStay(Collider other)
     {
-        fireDelay += Time.deltaTime;
-        isFireReady = equipWeapon.rate < fireDelay;
+        if (other.tag == "Weapon")
+            nearObject = other.gameObject;
+    }
 
-        if (fDown && isFireReady && !isJump)
-        {
-            equipWeapon.Use();
-            anim.SetTrigger("doFire");
-            fireDelay = 0;
-        }
+    private void OnTriggerExit(Collider other)
+    { 
+        if (other.tag == "Weapon")
+            nearObject = null;
     }
 }
