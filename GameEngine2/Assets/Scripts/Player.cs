@@ -21,10 +21,11 @@ public class Player : MonoBehaviour
     bool cDown;
 
     bool isJump;
-    bool isFireReady;
+    bool isFireReady = true;
     bool isHand;
     bool isSwap;
 
+    public Camera followCamera;
     public GameObject[] weapons;
     public bool[] hasWeapons;
     Rigidbody rigid;
@@ -75,6 +76,9 @@ public class Player : MonoBehaviour
     void Move()
     {
         moveVec = new Vector3(0, 0, vAxis).normalized;
+
+        if (isSwap || !isFireReady)
+            moveVec = Vector3.zero;
 
         if (vAxis == 1)
         {
@@ -190,7 +194,7 @@ public class Player : MonoBehaviour
         if (fDown && isFireReady && !isSwap)
         {
             equipWeapon.Use();
-            anim.SetTrigger("doPunch");
+            anim.SetTrigger(equipWeapon.type == Weapon.Type.Punch ? "doPunch" : "doFire");
             fireDelay = 0;
         }
     }
@@ -214,12 +218,13 @@ public class Player : MonoBehaviour
             }
         }
         anim.SetBool("isWalk", moveVec != Vector3.zero);
-
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        isJump = false;
+        if (collision.gameObject.tag == "Floor")
+            anim.SetBool("isJump", false);
+            isJump = false;
     }
 
     private void OnTriggerStay(Collider other)

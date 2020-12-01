@@ -21,6 +21,10 @@ public class Weapon : MonoBehaviour
             StopCoroutine("Hit");
             StartCoroutine("Hit");
         }
+        if (type == Type.Range)
+        {
+            StartCoroutine("Shot");
+        }
     }
 
     IEnumerator Hit()
