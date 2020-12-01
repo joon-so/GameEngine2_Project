@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     bool jDown;
     bool iDown;
     bool fDown;
+    bool mDown;
     bool sDown1;
     bool sDown2;
     bool cDown;
@@ -66,6 +67,7 @@ public class Player : MonoBehaviour
         wDown = Input.GetButton("Walk");
         jDown = Input.GetButtonDown("Jump");
         fDown = Input.GetButtonDown("Fire1");
+        mDown = Input.GetButton("Fire2");
         iDown = Input.GetButtonDown("Interation");
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
@@ -96,8 +98,19 @@ public class Player : MonoBehaviour
 
     void Trun()
     {
-        transform.Rotate(new Vector3(0, hAxis, 0) * rotateSpeed * Time.deltaTime);
         //transform.LookAt(transform.position + moveVec);
+        transform.Rotate(new Vector3(0, hAxis, 0) * rotateSpeed * Time.deltaTime);
+        if (mDown)
+        {
+            Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit rayHit;
+            if (Physics.Raycast(ray, out rayHit, 100))
+            {
+                Vector3 nextVec = rayHit.point - transform.position;
+                nextVec.y = 0;
+                transform.LookAt(transform.position + nextVec);
+            }
+        }
     }
 
     void Jump()
