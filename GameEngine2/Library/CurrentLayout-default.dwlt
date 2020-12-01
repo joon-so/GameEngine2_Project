@@ -102,7 +102,7 @@ MonoBehaviour:
   m_MinSize: {x: 232, y: 492}
   m_MaxSize: {x: 10002, y: 14042}
   vertical: 1
-  controlID: 82
+  controlID: 118
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -240,8 +240,8 @@ MonoBehaviour:
     y: 0
     width: 232
     height: 466
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -294,8 +294,8 @@ MonoBehaviour:
     y: 367
     width: 452
     height: 386
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 201, y: 221}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
@@ -472,23 +472,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 18340000
-      m_LastClickedID: 13336
-      m_ExpandedIDs: 1cfbffff3cfbffff5cfbffff60fbffff66fbffff68fbffffea330000fa330000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 9eefffffaaefffffb2efffffb4efffffb6efffffb8efffffbcefffffbeefffffc2efffffc4efffffcaefffff12f0ffff20f0ffff38f0ffff2af8ffff68fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Weapon Gun_L
+        m_OriginalName: Weapon Gun_L
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: -4270
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 10}
       m_SearchString: 
@@ -575,11 +575,11 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Animation
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Animation
   m_LastFoldersGridSize: 16
   m_LastProjectPath: "C:\\Users\\LeeMiReuk\\Desktop\\3\uD559\uB144 2\uD559\uAE30\\\uAC8C\uC784
     \uC5D4\uC9C42\\GameEngine2_Project\\GameEngine2"
@@ -587,9 +587,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 62440000
-    m_LastClickedID: 17506
-    m_ExpandedIDs: 000000002244000024440000264400006444000000ca9a3b
+    m_SelectedIDs: 5e440000
+    m_LastClickedID: 17502
+    m_ExpandedIDs: 00000000284400002a4400002c44000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -617,7 +617,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000224400002444000026440000
+    m_ExpandedIDs: 00000000284400002a4400002c440000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -644,22 +644,22 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: EnemyFSM
-      m_OriginalName: EnemyFSM
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 11694
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 3}
     m_CreateAssetUtility:
@@ -801,9 +801,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 24.713242, y: 9.643625, z: 1.4104404}
+    m_Target: {x: -4.3933578, y: -7.6138625, z: 3.3502755}
     speed: 2
-    m_Value: {x: 24.713242, y: 9.643625, z: 1.4104404}
+    m_Value: {x: -4.3933578, y: -7.6138625, z: 3.3502755}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -849,13 +849,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.34041068, y: 0.08119554, z: -0.029822705, w: 0.9363492}
+    m_Target: {x: 0.4151786, y: -0.3953626, z: 0.20667069, w: 0.7929148}
     speed: 2
-    m_Value: {x: 0.3403466, y: 0.08259538, z: -0.030331599, w: 0.9361743}
+    m_Value: {x: 0.41546497, y: -0.39415076, z: 0.2060362, w: 0.7934627}
   m_Size:
-    m_Target: 13.835585
+    m_Target: 5.969466
     speed: 2
-    m_Value: 13.239794
+    m_Value: 6.2694664
   m_Ortho:
     m_Target: 0
     speed: 2

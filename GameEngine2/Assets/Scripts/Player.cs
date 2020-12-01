@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     public float speed;
     public float rotateSpeed;
     public float jumpPower;
-    
+
     float hAxis;
     float vAxis;
     float fireDelay;
@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     bool isFireReady = true;
     bool isHand;
     bool isSwap;
+    bool isBorder;
 
     public Camera followCamera;
     public GameObject[] weapons;
@@ -38,7 +39,7 @@ public class Player : MonoBehaviour
     int equipWeaponIndex_R;
 
     Vector3 moveVec;
-    
+
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -84,15 +85,20 @@ public class Player : MonoBehaviour
 
         if (vAxis == 1)
         {
-            transform.position += transform.forward * moveVec.z * speed * (wDown ? 1.5f : 1f) * Time.deltaTime;
+            if (!isBorder)
+            {
+                transform.position += transform.forward * moveVec.z * speed * (wDown ? 1.5f : 1f) * Time.deltaTime;
+            }
             anim.SetBool("isRun", wDown);
         }
         else if (vAxis == -1)
         {
-            transform.position += transform.forward * moveVec.z * speed * 1f * Time.deltaTime;
+            if (!isBorder)
+            {
+                transform.position += transform.forward * moveVec.z * speed * 1f * Time.deltaTime;
+            }
             anim.SetBool("isRun", false);
         }
-
         anim.SetBool("isWalk", moveVec != Vector3.zero);
     }
 
@@ -128,8 +134,8 @@ public class Player : MonoBehaviour
         if (sDown1 && ((!hasWeapons[0] && !hasWeapons[1]) || (equipWeaponIndex_L == 0) && equipWeaponIndex_R == 1))
             return;
         if (sDown2 && ((!hasWeapons[2] && !hasWeapons[3]) || (equipWeaponIndex_L == 2) && equipWeaponIndex_R == 3))
-            return; 
-     
+            return;
+
         int weaponIndex_L = 0;
         int weaponIndex_R = 1;
         if (sDown1) weaponIndex_L = 0;
@@ -183,7 +189,7 @@ public class Player : MonoBehaviour
 
     void Interation()
     {
-        if(iDown && nearObject != null && !isJump)
+        if (iDown && nearObject != null && !isJump)
         {
             if (nearObject.tag == "Weapon")
             {
@@ -195,7 +201,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-    
+
     void Attack()
     {
         if (equipWeapon == null)
@@ -204,7 +210,7 @@ public class Player : MonoBehaviour
         fireDelay += Time.deltaTime;
         isFireReady = equipWeapon.rate < fireDelay;
 
-        if (fDown && isFireReady && !isSwap)
+        if (fDown && isFireReady && !isSwap && !isJump)
         {
             equipWeapon.Use();
             anim.SetTrigger(equipWeapon.type == Weapon.Type.Punch ? "doPunch" : "doFire");
@@ -233,11 +239,29 @@ public class Player : MonoBehaviour
         anim.SetBool("isWalk", moveVec != Vector3.zero);
     }
 
+    void FreezeRotation()
+    {
+        rigid.angularVelocity = Vector3.zero;
+    }
+
+    void StopToWall()
+    {
+        Debug.DrawRay(transform.position, transform.forward, Color.green);
+        isBorder = Physics.Raycast(transform.position, transform.forward, 1, LayerMask.GetMask("Wall"));
+    }
+
+    private void FixedUpdate()
+    {
+        FreezeRotation();
+        StopToWall();
+    }
+
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
             anim.SetBool("isJump", false);
-            isJump = false;
+        isJump = false;
     }
 
     private void OnTriggerStay(Collider other)
@@ -247,7 +271,7 @@ public class Player : MonoBehaviour
     }
 
     private void OnTriggerExit(Collider other)
-    { 
+    {
         if (other.tag == "Weapon")
             nearObject = null;
     }
