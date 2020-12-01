@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
         fDown = Input.GetButtonDown("Fire1");
-        cDown = Input.GetButtonDown("Wary");
+        cDown = Input.GetButton("Wary");
 
     }
 
@@ -210,17 +210,16 @@ public class Player : MonoBehaviour
 
             if (vAxis == 1)
             {
-                transform.position += transform.forward * moveVec.z * speed * (wDown ? 1.5f : 1f) * Time.deltaTime;
+                transform.position += transform.forward * moveVec.z * speed * (wDown ? -0.45f : -0.5f) * Time.deltaTime;
                 anim.SetBool("isRun", wDown);
             }
             else if (vAxis == -1)
             {
-                transform.position += transform.forward * moveVec.z * speed * 1f * Time.deltaTime;
+                transform.position += transform.forward * moveVec.z * speed * -0.5f * Time.deltaTime;
                 anim.SetBool("isRun", false);
             }
-
-            anim.SetBool("isWalk", moveVec != Vector3.zero);
         }
+        anim.SetBool("isWalk", moveVec != Vector3.zero);
 
     }
 
