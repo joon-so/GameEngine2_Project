@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
     Animator anim;
 
     GameObject nearObject;
-    GameObject equipWeapon;
+    Weapon equipWeapon;
     int equipWeaponIndex_L;
     int equipWeaponIndex_R;
 
@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
         Swap();
         Interation();
         Wary();
-        //Attack();
+        Attack();
     }
 
     void GetInput()
@@ -64,10 +64,10 @@ public class Player : MonoBehaviour
         vAxis = Input.GetAxisRaw("Vertical");
         wDown = Input.GetButton("Walk");
         jDown = Input.GetButtonDown("Jump");
+        fDown = Input.GetButtonDown("Fire1");
         iDown = Input.GetButtonDown("Interation");
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
-        fDown = Input.GetButtonDown("Fire1");
         cDown = Input.GetButton("Wary");
 
     }
@@ -123,16 +123,17 @@ public class Player : MonoBehaviour
         if ((sDown1) && !isJump && !isHand && !isSwap)
         {
             if (equipWeapon != null)
-                equipWeapon.SetActive(false);
-            equipWeapon = weapons[weaponIndex_L + 2];
-            equipWeapon.SetActive(false);
-            equipWeapon = weapons[weaponIndex_R + 2];
-            equipWeapon.SetActive(false);
+                equipWeapon.gameObject.SetActive(false);
+            equipWeapon = weapons[weaponIndex_L + 2].GetComponent<Weapon>();
+            equipWeapon.gameObject.SetActive(false);
+            equipWeapon = weapons[weaponIndex_R + 2].GetComponent<Weapon>(); ;
+            equipWeapon.gameObject.SetActive(false);
 
-            equipWeapon = weapons[weaponIndex_L];
-            equipWeapon.SetActive(true);
-            equipWeapon = weapons[weaponIndex_R];
-            equipWeapon.SetActive(true);
+            equipWeapon = weapons[weaponIndex_L].GetComponent<Weapon>(); ;
+            equipWeapon.gameObject.SetActive(true);
+            equipWeapon = weapons[weaponIndex_R].GetComponent<Weapon>(); ;
+            equipWeapon.gameObject.SetActive(true);
+
 
             anim.SetTrigger("doSwap");
             isSwap = true;
@@ -141,44 +142,21 @@ public class Player : MonoBehaviour
         if ((sDown2) && !isJump && !isHand && !isSwap)
         {
             if (equipWeapon != null)
-                equipWeapon.SetActive(false);
-            equipWeapon = weapons[weaponIndex_L - 2];
-            equipWeapon.SetActive(false);
-            equipWeapon = weapons[weaponIndex_R - 2];
-            equipWeapon.SetActive(false);
+                equipWeapon.gameObject.SetActive(false);
+            equipWeapon = weapons[weaponIndex_L - 2].GetComponent<Weapon>(); ;
+            equipWeapon.gameObject.SetActive(false);
+            equipWeapon = weapons[weaponIndex_R - 2].GetComponent<Weapon>(); ;
+            equipWeapon.gameObject.SetActive(false);
 
-            equipWeapon = weapons[weaponIndex_L];
-            equipWeapon.SetActive(true);
-            equipWeapon = weapons[weaponIndex_R];
-            equipWeapon.SetActive(true);
+            equipWeapon = weapons[weaponIndex_L].GetComponent<Weapon>(); ;
+            equipWeapon.gameObject.SetActive(true);
+            equipWeapon = weapons[weaponIndex_R].GetComponent<Weapon>(); ;
+            equipWeapon.gameObject.SetActive(true);
 
             anim.SetTrigger("doSwap");
             isSwap = true;
             Invoke("SwapOut", 0.1f);
         }
-        if ((sDown1 || sDown2) && !isJump)
-        {
-            if (equipWeapon != null)
-            {
-                equipWeapon.SetActive(false);
-            }
-            equipWeaponIndex_L = weaponIndex_L;
-            equipWeaponIndex_R = weaponIndex_R;
-            equipWeapon = weapons[weaponIndex_L];
-            equipWeapon.SetActive(true);
-            equipWeapon = weapons[weaponIndex_R];
-            equipWeapon.SetActive(true);
-
-            anim.SetTrigger("doSwap");
-            isSwap = true;
-
-            Invoke("SwapOut", 0.4f);
-        }
-    }
-
-    void HandOut()
-    {
-        isHand = false;
     }
 
     void SwapOut()
@@ -198,6 +176,22 @@ public class Player : MonoBehaviour
 
                 Destroy(nearObject);
             }
+        }
+    }
+    
+    void Attack()
+    {
+        if (equipWeapon == null)
+            return;
+
+        fireDelay += Time.deltaTime;
+        isFireReady = equipWeapon.rate < fireDelay;
+
+        if (fDown && isFireReady && !isSwap)
+        {
+            equipWeapon.Use();
+            anim.SetTrigger("doPunch");
+            fireDelay = 0;
         }
     }
 
@@ -222,20 +216,6 @@ public class Player : MonoBehaviour
         anim.SetBool("isWalk", moveVec != Vector3.zero);
 
     }
-
-
-    //void Attack()
-    //{
-    //    fireDelay += Time.deltaTime;
-    //    isFireReady = equipWeapon.rate < fireDelay;
-
-    //    if (fDown && isFireReady && !isJump)
-    //    {
-    //        equipWeapon.Use();
-    //        anim.SetTrigger("doFire");
-    //        fireDelay = 0;
-    //    }
-    //}
 
     private void OnCollisionEnter(Collision collision)
     {
