@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
     public bool[] hasWeapons;
     Rigidbody rigid;
     Animator anim;
+    BoxCollider collid;
 
     GameObject nearObject;
     Weapon equipWeapon;
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        collid = GetComponent <BoxCollider>();
 
         hasWeapons[0] = true;
         hasWeapons[1] = true;
@@ -230,6 +232,8 @@ public class Player : MonoBehaviour
         anim.SetBool("isWary", cDown);
         if (cDown)
         {
+            collid.size = new Vector3(0.35f, 0.6f, 0.6f);
+            collid.center = new Vector3(0f, 0.3f, 0f);
             moveVec = new Vector3(0, 0, vAxis).normalized;
 
             if (vAxis == 1)
@@ -242,6 +246,11 @@ public class Player : MonoBehaviour
                 transform.position += transform.forward * moveVec.z * speed * -0.5f * Time.deltaTime;
                 anim.SetBool("isRun", false);
             }
+        }
+        else
+        {
+            collid.size = new Vector3(0.35f, 0.95f, 0.6f);
+            collid.center = new Vector3(0f, 0.48f, 0f);
         }
         anim.SetBool("isWalk", moveVec != Vector3.zero);
     }
@@ -275,7 +284,7 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
-            anim.SetBool("isJump", false);
+            anim.SetBool("doJump", false);
         isJump = false;
     }
 
