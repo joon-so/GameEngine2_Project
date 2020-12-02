@@ -202,6 +202,7 @@ MonoBehaviour:
   speed: 3
   rotateSpeed: 360
   jumpPower: 3
+  hp: 100
   followCamera: {fileID: 963194227}
   weapons:
   - {fileID: 2078223700}
@@ -349,6 +350,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 781876352}
+  - {fileID: 1413023999}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -366,7 +368,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   rotateSpeed: 0
-  Hp: 100
+  hp: 100
+  bulletPos: {fileID: 1413023999}
+  bullet: {fileID: 1353060761354673456, guid: bd681993b1316304ba532784042a217b, type: 3}
 --- !u!1 &338290044
 GameObject:
   m_ObjectHideFlags: 0
@@ -5951,6 +5955,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1493f9878f1a95c4e8e3499f6ee36d07, type: 3}
+--- !u!1 &1413023998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1413023999}
+  m_Layer: 0
+  m_Name: BulletPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1413023999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1413023998}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.023, y: 1.814, z: 1.154}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 333628467}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1511364645
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5962,9 +5996,17 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
@@ -5978,41 +6020,81 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100010, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100012, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100012, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100014, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100014, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100016, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100016, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100018, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100018, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100020, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100020, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100022, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100022, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100024, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100024, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100026, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100026, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100028, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
@@ -6025,6 +6107,10 @@ PrefabInstance:
     - target: {fileID: 100032, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100032, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100034, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
@@ -6042,6 +6128,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100040, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100042, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -6050,17 +6140,33 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100044, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100046, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100046, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100048, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100048, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100050, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100050, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100052, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
@@ -6074,6 +6180,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100056, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100058, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -6082,13 +6192,25 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100060, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100062, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100062, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100064, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100064, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100066, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Name
@@ -6106,6 +6228,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100068, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100070, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -6113,6 +6239,10 @@ PrefabInstance:
     - target: {fileID: 100072, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100072, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100074, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
@@ -6126,13 +6256,25 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100078, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100080, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100080, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 100082, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100082, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100084, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
@@ -6141,6 +6283,10 @@ PrefabInstance:
     - target: {fileID: 100086, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100086, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 100088, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
@@ -6165,6 +6311,10 @@ PrefabInstance:
     - target: {fileID: 100098, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100098, guid: d11271f917495424a810bb5554cb993b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 400066, guid: d11271f917495424a810bb5554cb993b, type: 3}
       propertyPath: m_LocalPosition.x

@@ -6,7 +6,8 @@ public class Enemy1 : MonoBehaviour
 {
     public float speed;
     public float rotateSpeed;
-    public float Hp = 100f;
+    public float hp = 100f;
+    float shootCooltime = 1.5f;
     float playerDistance;
     float detectDistance = 8f;
     float attackDistance = 6f;
@@ -15,6 +16,8 @@ public class Enemy1 : MonoBehaviour
 
     GameObject player;
     Animator anim;
+    public Transform bulletPos;
+    public GameObject bullet;
 
     void Awake()
     {
@@ -38,6 +41,16 @@ public class Enemy1 : MonoBehaviour
         {
             moveVec = (player.transform.position - transform.position).normalized;
             transform.LookAt(transform.position + moveVec);
+
+            shootCooltime -= Time.deltaTime;
+            if(shootCooltime < 0)
+            {
+                GameObject instantBullet = Instantiate(bullet, bulletPos.position, bulletPos.rotation);
+                Rigidbody bulletRigid = instantBullet.GetComponent<Rigidbody>();
+                bulletRigid.velocity = bulletPos.forward * 50;
+
+                shootCooltime = 1.5f;
+            }
         }
     }
 }

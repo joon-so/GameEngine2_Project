@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public float speed;
     public float rotateSpeed;
     public float jumpPower;
+    public float hp;
 
     float hAxis;
     float vAxis;
@@ -26,6 +27,7 @@ public class Player : MonoBehaviour
     bool isHand;
     bool isSwap;
     bool isBorder;
+    bool death = false;
 
     public Camera followCamera;
     public GameObject[] weapons;
@@ -52,13 +54,18 @@ public class Player : MonoBehaviour
     void Update()
     {
         GetInput();
-        Move();
-        Trun();
-        Jump();
-        Swap();
-        Interation();
-        Wary();
-        Attack();
+        if (hp <= 0 && death == false)
+            Dead();
+        else if (!death)
+        {
+            Move();
+            Trun();
+            Jump();
+            Swap();
+            Interation();
+            Wary();
+            Attack();
+        }
     }
 
     void GetInput()
@@ -239,6 +246,15 @@ public class Player : MonoBehaviour
         anim.SetBool("isWalk", moveVec != Vector3.zero);
     }
 
+    void Dead()
+    {
+        if (hp <= 0 || death == false)
+        {
+            anim.SetTrigger("Death");
+            death = true;
+        }
+    }
+
     void FreezeRotation()
     {
         rigid.angularVelocity = Vector3.zero;
@@ -255,7 +271,6 @@ public class Player : MonoBehaviour
         FreezeRotation();
         StopToWall();
     }
-
 
     private void OnCollisionEnter(Collision collision)
     {
