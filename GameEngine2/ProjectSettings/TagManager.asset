@@ -9,6 +9,7 @@ TagManager:
   - Punch
   - Weapon
   - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX

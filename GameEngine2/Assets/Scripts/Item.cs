@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public enum Type { Punch, Weapon };
+    public enum Type { Weapon };
     public Type type;
     public int value;
 
@@ -22,7 +22,7 @@ public class Item : MonoBehaviour
         transform.Rotate(Vector3.up * 20 * Time.deltaTime);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
         {

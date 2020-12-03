@@ -1,17 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     public float speed;
     public float rotateSpeed;
     public float jumpPower;
-    public float hp;
+
+    public Slider hpSlider;
+    public int maxHp;
+    public int hp;
 
     float hAxis;
     float vAxis;
-    float fireDelay;
 
     bool wDown;
     bool jDown;
@@ -23,23 +26,28 @@ public class Player : MonoBehaviour
     bool cDown;
 
     bool isJump;
-    bool isFireReady = true;
     bool isHand;
     bool isSwap;
     bool isBorder;
     bool death = false;
 
-    public Camera followCamera;
+    float fireDelay_L;
+    float fireDelay_R;
+    bool isFireReady_L = true;
+    bool isFireReady_R = true;
+    int equipWeaponIndex_L = -1;
+    int equipWeaponIndex_R = -1;
+    Weapon equipWeapon_L;
+    Weapon equipWeapon_R;
     public GameObject[] weapons;
     public bool[] hasWeapons;
+
+    public Camera followCamera;
     Rigidbody rigid;
     Animator anim;
     BoxCollider collid;
 
     GameObject nearObject;
-    Weapon equipWeapon;
-    int equipWeaponIndex_L;
-    int equipWeaponIndex_R;
 
     Vector3 moveVec;
 
@@ -48,9 +56,11 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         collid = GetComponent <BoxCollider>();
+    }
 
-        hasWeapons[0] = true;
-        hasWeapons[1] = true;
+     void Start()
+    {
+        hp = maxHp;
     }
 
     void Update()
@@ -67,6 +77,7 @@ public class Player : MonoBehaviour
             Interation();
             Wary();
             Attack();
+            hpSlider.value = (float)hp / (float)maxHp;
         }
     }
 
@@ -89,7 +100,7 @@ public class Player : MonoBehaviour
     {
         moveVec = new Vector3(0, 0, vAxis).normalized;
 
-        if (isSwap || !isFireReady)
+        if (isSwap || !isFireReady_L || !isFireReady_R)
             moveVec = Vector3.zero;
 
         if (vAxis == 1)
@@ -145,50 +156,96 @@ public class Player : MonoBehaviour
         if (sDown2 && ((!hasWeapons[2] && !hasWeapons[3]) || (equipWeaponIndex_L == 2) && equipWeaponIndex_R == 3))
             return;
 
-        int weaponIndex_L = 0;
-        int weaponIndex_R = 1;
+        int weaponIndex_L = -1;
+        int weaponIndex_R = -1;
         if (sDown1) weaponIndex_L = 0;
         if (sDown1) weaponIndex_R = 1;
         if (sDown2) weaponIndex_L = 2;
         if (sDown2) weaponIndex_R = 3;
 
-        if ((sDown1) && !isJump && !isHand && !isSwap)
+
+        if (sDown2 && !isJump)
         {
-            if (equipWeapon != null)
-                equipWeapon.gameObject.SetActive(false);
-            equipWeapon = weapons[weaponIndex_L + 2].GetComponent<Weapon>();
-            equipWeapon.gameObject.SetActive(false);
-            equipWeapon = weapons[weaponIndex_R + 2].GetComponent<Weapon>(); ;
-            equipWeapon.gameObject.SetActive(false);
+            if(equipWeapon_L != null)
+                equipWeapon_L.gameObject.SetActive(false);
 
-            equipWeapon = weapons[weaponIndex_L].GetComponent<Weapon>(); ;
-            equipWeapon.gameObject.SetActive(true);
-            equipWeapon = weapons[weaponIndex_R].GetComponent<Weapon>(); ;
-            equipWeapon.gameObject.SetActive(true);
+            equipWeaponIndex_L = weaponIndex_L;
+            equipWeapon_L = weapons[weaponIndex_L].GetComponent<Weapon>();
+            equipWeapon_L.gameObject.SetActive(true);
 
+            if (equipWeapon_R != null)
+                equipWeapon_R.gameObject.SetActive(false);
+
+            equipWeaponIndex_R = weaponIndex_R;
+            equipWeapon_R = weapons[weaponIndex_R].GetComponent<Weapon>();
+            equipWeapon_R.gameObject.SetActive(true);
 
             anim.SetTrigger("doSwap");
             isSwap = true;
             Invoke("SwapOut", 0.1f);
         }
-        if ((sDown2) && !isJump && !isHand && !isSwap)
-        {
-            if (equipWeapon != null)
-                equipWeapon.gameObject.SetActive(false);
-            equipWeapon = weapons[weaponIndex_L - 2].GetComponent<Weapon>(); ;
-            equipWeapon.gameObject.SetActive(false);
-            equipWeapon = weapons[weaponIndex_R - 2].GetComponent<Weapon>(); ;
-            equipWeapon.gameObject.SetActive(false);
 
-            equipWeapon = weapons[weaponIndex_L].GetComponent<Weapon>(); ;
-            equipWeapon.gameObject.SetActive(true);
-            equipWeapon = weapons[weaponIndex_R].GetComponent<Weapon>(); ;
-            equipWeapon.gameObject.SetActive(true);
+        if (sDown1 && !isJump)
+        {
+            if (equipWeapon_L != null)
+                equipWeapon_L.gameObject.SetActive(false);
+
+            equipWeaponIndex_L = weaponIndex_L;
+            equipWeapon_L = weapons[weaponIndex_L].GetComponent<Weapon>();
+            equipWeapon_L.gameObject.SetActive(true);
+
+            if (equipWeapon_R != null)
+                equipWeapon_R.gameObject.SetActive(false);
+
+            equipWeaponIndex_R = weaponIndex_R;
+            equipWeapon_R = weapons[weaponIndex_R].GetComponent<Weapon>();
+            equipWeapon_R.gameObject.SetActive(true);
 
             anim.SetTrigger("doSwap");
             isSwap = true;
             Invoke("SwapOut", 0.1f);
         }
+
+
+
+
+        //if ((sDown1) && !isJump && !isHand && !isSwap)
+        //{
+        //    if (equipWeapon != null)
+        //        equipWeapon.gameObject.SetActive(false);
+        //    equipWeapon = weapons[weaponIndex_L + 2].GetComponent<Weapon>();
+        //    equipWeapon.gameObject.SetActive(false);
+        //    equipWeapon = weapons[weaponIndex_R + 2].GetComponent<Weapon>(); ;
+        //    equipWeapon.gameObject.SetActive(false);
+
+        //    equipWeapon = weapons[weaponIndex_L].GetComponent<Weapon>(); ;
+        //    equipWeapon.gameObject.SetActive(true);
+        //    equipWeapon = weapons[weaponIndex_R].GetComponent<Weapon>(); ;
+        //    equipWeapon.gameObject.SetActive(true);
+
+
+        //    anim.SetTrigger("doSwap");
+        //    isSwap = true;
+        //    Invoke("SwapOut", 0.1f);
+        //}
+        //if ((sDown2) && !isJump && !isHand && !isSwap)
+        //{
+        //    if (equipWeapon != null)
+        //        equipWeapon.gameObject.SetActive(false);
+        //    equipWeapon = weapons[weaponIndex_L - 2].GetComponent<Weapon>(); ;
+        //    equipWeapon.gameObject.SetActive(false);
+        //    equipWeapon = weapons[weaponIndex_R - 2].GetComponent<Weapon>(); ;
+        //    equipWeapon.gameObject.SetActive(false);
+
+        //    equipWeapon = weapons[weaponIndex_L].GetComponent<Weapon>(); ;
+        //    equipWeapon.gameObject.SetActive(true);
+        //    equipWeapon = weapons[weaponIndex_R].GetComponent<Weapon>(); ;
+        //    equipWeapon.gameObject.SetActive(true);
+
+        //    anim.SetTrigger("doSwap");
+        //    isSwap = true;
+        //    Invoke("SwapOut", 0.1f);
+        //}
     }
 
     void SwapOut()
@@ -200,7 +257,7 @@ public class Player : MonoBehaviour
     {
         if (iDown && nearObject != null && !isJump)
         {
-            if (nearObject.tag == "Weapon")
+            if (nearObject.tag == "Weapon" || nearObject.tag == "Punch")
             {
                 Item item = nearObject.GetComponent<Item>();
                 int weaponIndex = item.value;
@@ -213,17 +270,28 @@ public class Player : MonoBehaviour
 
     void Attack()
     {
-        if (equipWeapon == null)
+        if (equipWeapon_L == null || equipWeapon_R == null)
             return;
 
-        fireDelay += Time.deltaTime;
-        isFireReady = equipWeapon.rate < fireDelay;
+        fireDelay_L += Time.deltaTime;
+        isFireReady_L = equipWeapon_L.rate < fireDelay_L;
 
-        if (fDown && isFireReady && !isSwap && !isJump)
+
+        if (fDown && isFireReady_L && !isSwap && !isJump)
         {
-            equipWeapon.Use();
-            anim.SetTrigger(equipWeapon.type == Weapon.Type.Punch ? "doPunch" : "doFire");
-            fireDelay = 0;
+            equipWeapon_L.Use();
+            anim.SetTrigger(equipWeapon_L.type == Weapon.Type.Punch ? "doPunch" : "doFire");
+            fireDelay_L = 0;
+        }
+
+        fireDelay_R += Time.deltaTime;
+        isFireReady_R = equipWeapon_R.rate < fireDelay_R;
+
+        if (fDown && isFireReady_R && !isSwap && !isJump)
+        {
+            equipWeapon_R.Use();
+            anim.SetTrigger(equipWeapon_R.type == Weapon.Type.Punch ? "doPunch" : "doFire");
+            fireDelay_R = 0;
         }
     }
 

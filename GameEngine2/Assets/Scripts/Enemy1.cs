@@ -6,12 +6,17 @@ public class Enemy1 : MonoBehaviour
 {
     public float speed;
     public float rotateSpeed;
-    public float hp = 100f;
     float shootCooltime = 1.5f;
     float playerDistance;
     float detectDistance = 8f;
     float attackDistance = 6f;
     bool death = false;
+
+    public int maxHealth;
+    public int curHealth;
+
+    Rigidbody rigid;
+    BoxCollider boxCollider;
 
     Vector3 moveVec;
 
@@ -22,13 +27,16 @@ public class Enemy1 : MonoBehaviour
 
     void Awake()
     {
+        rigid = GetComponent<Rigidbody>();
+        boxCollider = GetComponent<BoxCollider>();
+
         anim = GetComponentInChildren<Animator>();
         player = GameObject.Find("Player");
     }
 
     void Update()
     {
-        if (hp > 0)
+        if (curHealth > 0)
         {
 
             playerDistance = Vector3.Distance(player.transform.position, transform.position);
@@ -64,6 +72,24 @@ public class Enemy1 : MonoBehaviour
                 anim.SetTrigger("Death");
                 death = true;
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Punch")
+        {
+            Weapon weapon = other.GetComponent<Weapon>();
+            curHealth -= weapon.damage;
+
+            Debug.Log("punch");
+        }
+        else if (other.tag == "Bullet")
+        {
+            Bullet bullet = other.GetComponent<Bullet>();
+            curHealth -= bullet.damage;
+
+            Debug.Log("bullet");
         }
     }
 }
