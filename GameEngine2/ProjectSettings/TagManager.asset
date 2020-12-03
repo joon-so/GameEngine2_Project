@@ -8,6 +8,7 @@ TagManager:
   - Wall
   - Punch
   - Weapon
+  - Enemy
   layers:
   - Default
   - TransparentFX
