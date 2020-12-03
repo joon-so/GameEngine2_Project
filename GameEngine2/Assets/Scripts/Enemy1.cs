@@ -11,6 +11,7 @@ public class Enemy1 : MonoBehaviour
     float playerDistance;
     float detectDistance = 8f;
     float attackDistance = 6f;
+    bool death = false;
 
     Vector3 moveVec;
 
@@ -27,29 +28,41 @@ public class Enemy1 : MonoBehaviour
 
     void Update()
     {
-        playerDistance = Vector3.Distance(player.transform.position, transform.position);
-        anim.SetFloat("PlayerDistance", playerDistance);
-
-        if (playerDistance > attackDistance && playerDistance < detectDistance)
+        if (hp > 0)
         {
-            moveVec = (player.transform.position - transform.position).normalized;
-            transform.position += moveVec * speed * Time.deltaTime;
-            transform.LookAt(transform.position + moveVec);
-        }
 
-        else if (playerDistance < attackDistance )
-        {
-            moveVec = (player.transform.position - transform.position).normalized;
-            transform.LookAt(transform.position + moveVec);
+            playerDistance = Vector3.Distance(player.transform.position, transform.position);
+            anim.SetFloat("PlayerDistance", playerDistance);
 
-            shootCooltime -= Time.deltaTime;
-            if(shootCooltime < 0)
+            if (playerDistance > attackDistance && playerDistance < detectDistance)
             {
-                GameObject instantBullet = Instantiate(bullet, bulletPos.position, bulletPos.rotation);
-                Rigidbody bulletRigid = instantBullet.GetComponent<Rigidbody>();
-                bulletRigid.velocity = bulletPos.forward * 50;
+                moveVec = (player.transform.position - transform.position).normalized;
+                transform.position += moveVec * speed * Time.deltaTime;
+                transform.LookAt(transform.position + moveVec);
+            }
 
-                shootCooltime = 1.5f;
+            else if (playerDistance < attackDistance)
+            {
+                moveVec = (player.transform.position - transform.position).normalized;
+                transform.LookAt(transform.position + moveVec);
+
+                shootCooltime -= Time.deltaTime;
+                if (shootCooltime < 0)
+                {
+                    GameObject instantBullet = Instantiate(bullet, bulletPos.position, bulletPos.rotation);
+                    Rigidbody bulletRigid = instantBullet.GetComponent<Rigidbody>();
+                    bulletRigid.velocity = bulletPos.forward * 50;
+
+                    shootCooltime = 1.5f;
+                }
+            }
+        }
+        else
+        {
+            if (!death)
+            {
+                anim.SetTrigger("Death");
+                death = true;
             }
         }
     }
