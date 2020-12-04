@@ -20,11 +20,11 @@ TagManager:
   - 
   - 
   - Player
-  - Enemy
-  - Floor
   - PlayerBullet
+  - Enemy
+  - EnemyDead
   - Wall
-  - 
+  - Floor
   - 
   - 
   - 

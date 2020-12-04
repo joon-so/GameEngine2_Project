@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy1 : MonoBehaviour
 {
@@ -13,25 +14,32 @@ public class Enemy1 : MonoBehaviour
     bool death = false;
 
     public int maxHealth;
-    public int curHealth;
-
-    Rigidbody rigid;
-    BoxCollider boxCollider;
+    int curHealth;
 
     Vector3 moveVec;
 
     GameObject player;
     Animator anim;
+
     public Transform bulletPos;
     public GameObject bullet;
+
+    Rigidbody rigid;
+    BoxCollider boxCollider;
+
+    public Slider hpSlider;
 
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
-        boxCollider = GetComponent<BoxCollider>();
 
         anim = GetComponentInChildren<Animator>();
         player = GameObject.Find("Player");
+    }
+
+    void Start()
+    {
+        curHealth = maxHealth;
     }
 
     void Update()
@@ -64,6 +72,7 @@ public class Enemy1 : MonoBehaviour
                     shootCooltime = 1.5f;
                 }
             }
+
         }
         else
         {
@@ -73,23 +82,42 @@ public class Enemy1 : MonoBehaviour
                 death = true;
             }
         }
+        hpSlider.value = (float)curHealth / (float)maxHealth;
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Punch")
         {
             Weapon weapon = other.GetComponent<Weapon>();
             curHealth -= weapon.damage;
+            Vector3 reactVec = transform.position - other.transform.position;
 
-            Debug.Log("punch");
+            StartCoroutine(OnDamage(reactVec));
         }
         else if (other.tag == "Bullet")
         {
             Bullet bullet = other.GetComponent<Bullet>();
             curHealth -= bullet.damage;
+            Vector3 reactVec = transform.position - other.transform.position;
+            Destroy(other.gameObject);
 
-            Debug.Log("bullet");
+            StartCoroutine(OnDamage(reactVec));
+        }
+    }
+
+    IEnumerator OnDamage(Vector3 reactVec)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        if (curHealth < 0)
+        {
+            gameObject.layer = 14;
+
+            reactVec = reactVec.normalized;
+            reactVec += Vector3.up;
+            rigid.AddForce(reactVec * 5, ForceMode.Impulse);
+            Destroy(gameObject, 2);
         }
     }
 }

@@ -98,7 +98,7 @@ public class Player : MonoBehaviour
 
     void Move()
     {
-        moveVec = new Vector3(0, 0, vAxis).normalized;
+        moveVec = new Vector3(hAxis, 0, vAxis).normalized;
 
         if (isSwap || !isFireReady_L || !isFireReady_R)
             moveVec = Vector3.zero;
@@ -125,7 +125,7 @@ public class Player : MonoBehaviour
     void Trun()
     {
         //transform.LookAt(transform.position + moveVec);
-        transform.Rotate(new Vector3(0, hAxis, 0) * rotateSpeed * Time.deltaTime);
+       // transform.Rotate(new Vector3(0, hAxis, 0) * rotateSpeed * Time.deltaTime);
         if (mDown)
         {
             Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
@@ -343,26 +343,26 @@ public class Player : MonoBehaviour
         isBorder = Physics.Raycast(transform.position, transform.forward, 1, LayerMask.GetMask("Wall"));
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         FreezeRotation();
         StopToWall();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
             anim.SetBool("doJump", false);
         isJump = false;
     }
 
-    private void OnTriggerStay(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if (other.tag == "Weapon")
             nearObject = other.gameObject;
     }
 
-    private void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
         if (other.tag == "Weapon")
             nearObject = null;
