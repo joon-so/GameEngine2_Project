@@ -67,6 +67,7 @@ public class Enemy1 : MonoBehaviour
                     GameObject instantBullet = Instantiate(bullet, bulletPos.position, bulletPos.rotation);
                     Rigidbody bulletRigid = instantBullet.GetComponent<Rigidbody>();
                     bulletRigid.velocity = bulletPos.forward * 50;
+                    SoundManager.instance.PlayShootingEffect();
 
                     shootCooltime = 1.5f;
                 }

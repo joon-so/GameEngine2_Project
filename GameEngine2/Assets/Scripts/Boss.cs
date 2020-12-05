@@ -67,6 +67,7 @@ public class Boss : MonoBehaviour
                     Rigidbody bulletRigid = instantBullet.GetComponent<Rigidbody>();
                     bulletRigid.velocity = bulletPos.forward * 50;
 
+                    SoundManager.instance.PlayShootingEffect();
                     shootCooltime = 1.5f;
                 }
             }
@@ -79,7 +80,7 @@ public class Boss : MonoBehaviour
                 death = true;
             }
         }
-        hpSlider.value = (float)curHealth / (float)maxHealth;
+        //hpSlider.value = (float)curHealth / (float)maxHealth;
     }
 
     void OnTriggerEnter(Collider other)
