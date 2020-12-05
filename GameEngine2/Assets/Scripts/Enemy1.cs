@@ -25,7 +25,6 @@ public class Enemy1 : MonoBehaviour
     public GameObject bullet;
 
     Rigidbody rigid;
-    BoxCollider boxCollider;
 
     public Slider hpSlider;
 
