@@ -112,7 +112,7 @@ public class Enemy1 : MonoBehaviour
 
         if (curHealth < 0)
         {
-            gameObject.layer = 14;
+            gameObject.layer = 11;
 
             reactVec = reactVec.normalized;
             reactVec += Vector3.up;

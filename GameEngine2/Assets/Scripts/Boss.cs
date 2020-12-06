@@ -80,7 +80,7 @@ public class Boss : MonoBehaviour
                 death = true;
             }
         }
-        //hpSlider.value = (float)curHealth / (float)maxHealth;
+        hpSlider.value = (float)curHealth / (float)maxHealth;
     }
 
     void OnTriggerEnter(Collider other)

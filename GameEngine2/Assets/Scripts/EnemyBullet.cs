@@ -8,22 +8,38 @@ public class EnemyBullet : MonoBehaviour
 
     Player player;
 
-    private void Awake()
-    {
-        player = GameObject.Find("Player").GetComponent<Player>();
-    }
+    //private void Awake()
+    //{
+    //    player = GameObject.Find("Player").GetComponent<Player>();
+    //}
 
-    private void OnCollisionEnter(Collision collision)
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.gameObject.tag == "Wall" || collision.gameObject.tag == "Floor")
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //    if (collision.gameObject.tag == "Player")
+    //    {
+    //        player.hp -= damage;
+    //        Debug.Log("1");
+    //        Destroy(gameObject);
+    //    }
+    //}
+    void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Wall" || collision.gameObject.tag == "Floor")
+        if (collision.gameObject.tag == "Floor")
         {
             Destroy(gameObject);
         }
-        if (collision.gameObject.tag == "Player")
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Wall")
         {
-            player.hp -= damage;
-            Debug.Log("1");
             Destroy(gameObject);
+
         }
     }
 }

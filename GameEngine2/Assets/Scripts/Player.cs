@@ -10,8 +10,8 @@ public class Player : MonoBehaviour
     public float jumpPower;
 
     public Slider hpSlider;
-    public int maxHp;
-    public int hp;
+    public int maxHealth;
+    public int Health;
 
     float hAxis;
     float vAxis;
@@ -26,10 +26,10 @@ public class Player : MonoBehaviour
     bool cDown;
 
     bool isJump;
-    bool isHand;
     bool isSwap;
     bool isBorder;
     bool death = false;
+    bool isDamage;
 
     float fireDelay_L;
     float fireDelay_R;
@@ -60,13 +60,13 @@ public class Player : MonoBehaviour
 
      void Start()
     {
-        hp = maxHp;
+        Health = maxHealth;
     }
 
     void Update()
     {
         GetInput();
-        if (hp <= 0 && death == false)
+        if (Health <= 0 && death == false)
             Dead();
         else if (!death)
         {
@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
             Interation();
             Wary();
             Attack();
-            hpSlider.value = (float)hp / (float)maxHp;
+            hpSlider.value = (float)Health / (float)maxHealth;
         }
     }
 
@@ -93,7 +93,6 @@ public class Player : MonoBehaviour
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
         cDown = Input.GetButton("Wary");
-
     }
 
     void Move()
@@ -205,47 +204,6 @@ public class Player : MonoBehaviour
             isSwap = true;
             Invoke("SwapOut", 0.1f);
         }
-
-
-
-
-        //if ((sDown1) && !isJump && !isHand && !isSwap)
-        //{
-        //    if (equipWeapon != null)
-        //        equipWeapon.gameObject.SetActive(false);
-        //    equipWeapon = weapons[weaponIndex_L + 2].GetComponent<Weapon>();
-        //    equipWeapon.gameObject.SetActive(false);
-        //    equipWeapon = weapons[weaponIndex_R + 2].GetComponent<Weapon>(); ;
-        //    equipWeapon.gameObject.SetActive(false);
-
-        //    equipWeapon = weapons[weaponIndex_L].GetComponent<Weapon>(); ;
-        //    equipWeapon.gameObject.SetActive(true);
-        //    equipWeapon = weapons[weaponIndex_R].GetComponent<Weapon>(); ;
-        //    equipWeapon.gameObject.SetActive(true);
-
-
-        //    anim.SetTrigger("doSwap");
-        //    isSwap = true;
-        //    Invoke("SwapOut", 0.1f);
-        //}
-        //if ((sDown2) && !isJump && !isHand && !isSwap)
-        //{
-        //    if (equipWeapon != null)
-        //        equipWeapon.gameObject.SetActive(false);
-        //    equipWeapon = weapons[weaponIndex_L - 2].GetComponent<Weapon>(); ;
-        //    equipWeapon.gameObject.SetActive(false);
-        //    equipWeapon = weapons[weaponIndex_R - 2].GetComponent<Weapon>(); ;
-        //    equipWeapon.gameObject.SetActive(false);
-
-        //    equipWeapon = weapons[weaponIndex_L].GetComponent<Weapon>(); ;
-        //    equipWeapon.gameObject.SetActive(true);
-        //    equipWeapon = weapons[weaponIndex_R].GetComponent<Weapon>(); ;
-        //    equipWeapon.gameObject.SetActive(true);
-
-        //    anim.SetTrigger("doSwap");
-        //    isSwap = true;
-        //    Invoke("SwapOut", 0.1f);
-        //}
     }
 
     void SwapOut()
@@ -333,7 +291,7 @@ public class Player : MonoBehaviour
 
     void Dead()
     {
-        if (hp <= 0 || death == false)
+        if (Health <= 0 || death == false)
         {
             anim.SetTrigger("Death");
             death = true;
@@ -362,6 +320,29 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Floor")
             anim.SetBool("doJump", false);
         isJump = false;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "EnemyBullet")
+        {
+            if (!isDamage)
+            {
+                EnemyBullet enemybullet = other.GetComponent<EnemyBullet>();
+                Health -= enemybullet.damage;
+                anim.SetTrigger("Damage");
+                StartCoroutine(OnDamage());
+            }
+        }
+    }
+
+    IEnumerator OnDamage()
+    {
+        isDamage = true;
+
+        yield return new WaitForSeconds(1f);
+
+        isDamage = false;
     }
 
     void OnTriggerStay(Collider other)
