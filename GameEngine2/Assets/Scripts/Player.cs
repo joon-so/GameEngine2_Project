@@ -282,7 +282,10 @@ public class Player : MonoBehaviour
             equipWeapon_L.Use();
             anim.SetTrigger(equipWeapon_L.type == Weapon.Type.Punch ? "doPunch" : "doFire");
             fireDelay_L = 0;
-            SoundManager.instance.PlayShootingEffect();
+            if (equipWeapon_L.type == Weapon.Type.Range)
+                SoundManager.instance.PlayShootingEffect();
+            else
+                SoundManager.instance.PlayPunchEffect();
         }
 
         fireDelay_R += Time.deltaTime;
@@ -293,7 +296,10 @@ public class Player : MonoBehaviour
             equipWeapon_R.Use();
             anim.SetTrigger(equipWeapon_R.type == Weapon.Type.Punch ? "doPunch" : "doFire");
             fireDelay_R = 0;
-            SoundManager.instance.PlayShootingEffect();
+            if (equipWeapon_R.type == Weapon.Type.Range)
+                SoundManager.instance.PlayShootingEffect();
+            else
+                SoundManager.instance.PlayPunchEffect();
         }
     }
 

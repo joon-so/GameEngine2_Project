@@ -787,6 +787,8 @@ MonoBehaviour:
   sfxSounds:
   - soundName: PlayerShootEffect
     clip: {fileID: 8300000, guid: fa5a8beea5991cb4e8fa6302dc57c59f, type: 3}
+  - soundName: EnemyPunchEffect
+    clip: {fileID: 8300000, guid: a37f44cbf8c2a7443a3c361efa2f233a, type: 3}
   - soundName: EnemyShootEffect
     clip: {fileID: 8300000, guid: 181c68120cf5c6048897a415bc077598, type: 3}
   bgmPlayer: {fileID: 317211766}
