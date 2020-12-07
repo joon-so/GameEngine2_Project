@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class Enemy1 : MonoBehaviour
 {
@@ -28,12 +29,18 @@ public class Enemy1 : MonoBehaviour
 
     public Slider hpSlider;
 
+    public Transform Target;
+    NavMeshAgent nav;
+
+
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
 
         anim = GetComponentInChildren<Animator>();
         player = GameObject.Find("Player");
+
+        nav = GetComponent<NavMeshAgent>();
     }
 
     void Start()
