@@ -69,9 +69,9 @@ public class Player : MonoBehaviour
             return;
 
         GetInput();
-        if (Health <= 0 && death == false)
-            Dead();
-        else if (!death)
+        //if (Health <= 0 && death == false)
+        //    Dead();
+        if (!death)
         {
             Move();
             Trun();
@@ -80,8 +80,8 @@ public class Player : MonoBehaviour
             Interation();
             Wary();
             Attack();
-            hpSlider.value = (float)Health / (float)maxHealth;
         }
+        hpSlider.value = (float)Health / (float)maxHealth;
     }
 
     void GetInput()
@@ -298,6 +298,7 @@ public class Player : MonoBehaviour
         {
             anim.SetTrigger("Death");
             death = true;
+            Health = 0;
         }
     }
 
@@ -329,12 +330,21 @@ public class Player : MonoBehaviour
     {
         if (other.tag == "EnemyBullet")
         {
+            if (death)
+                return;
             if (!isDamage)
             {
                 EnemyBullet enemybullet = other.GetComponent<EnemyBullet>();
                 Health -= enemybullet.damage;
                 anim.SetTrigger("Damage");
                 StartCoroutine(OnDamage());
+
+                if (Health <= 0)
+                {
+                    anim.SetTrigger("Death");
+                    death = true;
+                    Health = 0;
+                }
             }
         }
         if(other.tag == "End")
