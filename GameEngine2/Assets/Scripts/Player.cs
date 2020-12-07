@@ -65,6 +65,9 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.gm.gState != GameManager.GameState.Run)
+            return;
+
         GetInput();
         if (Health <= 0 && death == false)
             Dead();

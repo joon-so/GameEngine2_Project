@@ -19,7 +19,7 @@ public class Title : MonoBehaviour
 
     public void StartButton()
     {
-        SceneManager.LoadSceneAsync("SampleScene");
+        SceneManager.LoadSceneAsync("LastProject");
     }
 
     public void ManualButton()

@@ -26,9 +26,5 @@ public class Plane : MonoBehaviour
 
         if (changeTarget)
             transform.position = Vector3.Slerp(transform.position, target2, 0.005f);
-
-
-
-
     }
 }

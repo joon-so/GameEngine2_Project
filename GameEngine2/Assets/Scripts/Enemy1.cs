@@ -117,7 +117,7 @@ public class Enemy1 : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        if (curHealth < 0)
+        if (curHealth <= 0)
         {
             gameObject.layer = 11;
 

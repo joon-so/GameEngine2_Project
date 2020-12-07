@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,18 +13,71 @@ public class GameManager : MonoBehaviour
         Pause,
         GameOver,
     }
+    public GameState gState;
 
-    GameState gState;
+    GameObject play;
 
-    // Start is called before the first frame update
-    void Start()
+    Player player;
+
+    public static GameManager gm;
+
+    public GameObject optionUI;
+
+    void Awake()
     {
-        gState = GameState.Ready;    
+        if (gm == null)
+            gm = this;
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        gState = GameState.Ready;
+        StartCoroutine(GameStart());
+
+        play = GameObject.Find("Player");
+        player = play.GetComponent<Player>();
+
+    }
+    IEnumerator GameStart()
+    {
+        yield return new WaitForSeconds(15f);
+        gState = GameState.Run;
+    }
+
     void Update()
     {
-        
+        if (player.Health <= 0)
+        {
+            gState = GameState.GameOver;
+        }
+    }
+
+    public void OpenOptionWindow()
+    {
+        gState = GameState.Pause;
+
+        Time.timeScale = 0;
+
+        optionUI.SetActive(true);
+    }
+
+    public void CloseOptionWindow()
+    {
+        gState = GameState.Run;
+
+        Time.timeScale = 1.0f;
+
+        optionUI.SetActive(false);
+    }
+
+    public void GameRestart()
+    {
+        Time.timeScale = 1.0f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void GameExit()
+    {
+        SceneManager.LoadScene("Title");
     }
 }

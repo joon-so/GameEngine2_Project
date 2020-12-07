@@ -108,9 +108,9 @@ public class Boss : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        if (curHealth < 0)
+        if (curHealth <= 0)
         {
-            gameObject.layer = 14;
+            gameObject.layer = 11;
 
             reactVec = reactVec.normalized;
             reactVec += Vector3.up;
