@@ -19,6 +19,7 @@ public class Title : MonoBehaviour
 
     public void StartButton()
     {
+        Time.timeScale = 1.0f;
         SceneManager.LoadSceneAsync("LastProject");
     }
 
