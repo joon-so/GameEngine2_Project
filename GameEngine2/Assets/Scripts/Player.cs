@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     public float speed;
@@ -336,6 +336,10 @@ public class Player : MonoBehaviour
                 anim.SetTrigger("Damage");
                 StartCoroutine(OnDamage());
             }
+        }
+        if(other.tag == "End")
+        {
+            SceneManager.LoadScene("Ending");
         }
     }
 
