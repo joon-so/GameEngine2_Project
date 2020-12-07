@@ -46,10 +46,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (player.Health <= 0)
-        {
-            gState = GameState.GameOver;
-        }
+
     }
 
     public void OpenOptionWindow()

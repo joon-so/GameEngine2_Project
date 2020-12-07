@@ -28,7 +28,8 @@ public class Player : MonoBehaviour
     bool isJump;
     bool isSwap;
     bool isBorder;
-    bool death = false;
+    bool isDead = false;
+    float deathTime = 5f;
     bool isDamage;
 
     float fireDelay_L;
@@ -49,6 +50,9 @@ public class Player : MonoBehaviour
 
     GameObject nearObject;
 
+    public GameObject weapon1;
+    public GameObject weapon2;
+
     Vector3 moveVec;
 
     void Awake()
@@ -61,25 +65,30 @@ public class Player : MonoBehaviour
      void Start()
     {
         Health = maxHealth;
+        weapon1.SetActive(false);
+        weapon2.SetActive(false);
     }
 
     void Update()
     {
         if (GameManager.gm.gState != GameManager.GameState.Run)
             return;
-
         GetInput();
-        //if (Health <= 0 && death == false)
-        //    Dead();
-        if (!death)
+        Move();
+        Trun();
+        Jump();
+        Swap();
+        Interation();
+        Wary();
+        Attack();
+        if (isDead)
         {
-            Move();
-            Trun();
-            Jump();
-            Swap();
-            Interation();
-            Wary();
-            Attack();
+            deathTime -= Time.deltaTime;
+            if (deathTime < 0)
+            {
+                SceneManager.LoadScene("Ending");
+                GameManager.gm.gState = GameManager.GameState.GameOver;
+            }
         }
         hpSlider.value = (float)Health / (float)maxHealth;
     }
@@ -125,9 +134,7 @@ public class Player : MonoBehaviour
     }
 
     void Trun()
-    {
-        //transform.LookAt(transform.position + moveVec);
-       // transform.Rotate(new Vector3(0, hAxis, 0) * rotateSpeed * Time.deltaTime);
+    { 
         if (mDown)
         {
             Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
@@ -165,6 +172,29 @@ public class Player : MonoBehaviour
         if (sDown2) weaponIndex_L = 2;
         if (sDown2) weaponIndex_R = 3;
 
+        if (sDown1 && !isJump)
+        {
+            if (equipWeapon_L != null)
+                equipWeapon_L.gameObject.SetActive(false);
+
+            equipWeaponIndex_L = weaponIndex_L;
+            equipWeapon_L = weapons[weaponIndex_L].GetComponent<Weapon>();
+            equipWeapon_L.gameObject.SetActive(true);
+
+            if (equipWeapon_R != null)
+                equipWeapon_R.gameObject.SetActive(false);
+
+            equipWeaponIndex_R = weaponIndex_R;
+            equipWeapon_R = weapons[weaponIndex_R].GetComponent<Weapon>();
+            equipWeapon_R.gameObject.SetActive(true);
+
+            anim.SetTrigger("doSwap");
+            isSwap = true;
+            Invoke("SwapOut", 0.1f);
+
+            weapon1.SetActive(true);
+            weapon2.SetActive(false);
+        }
 
         if (sDown2 && !isJump)
         {
@@ -185,27 +215,9 @@ public class Player : MonoBehaviour
             anim.SetTrigger("doSwap");
             isSwap = true;
             Invoke("SwapOut", 0.1f);
-        }
 
-        if (sDown1 && !isJump)
-        {
-            if (equipWeapon_L != null)
-                equipWeapon_L.gameObject.SetActive(false);
-
-            equipWeaponIndex_L = weaponIndex_L;
-            equipWeapon_L = weapons[weaponIndex_L].GetComponent<Weapon>();
-            equipWeapon_L.gameObject.SetActive(true);
-
-            if (equipWeapon_R != null)
-                equipWeapon_R.gameObject.SetActive(false);
-
-            equipWeaponIndex_R = weaponIndex_R;
-            equipWeapon_R = weapons[weaponIndex_R].GetComponent<Weapon>();
-            equipWeapon_R.gameObject.SetActive(true);
-
-            anim.SetTrigger("doSwap");
-            isSwap = true;
-            Invoke("SwapOut", 0.1f);
+            weapon1.SetActive(false);
+            weapon2.SetActive(true);
         }
     }
 
@@ -223,7 +235,6 @@ public class Player : MonoBehaviour
                 Item item = nearObject.GetComponent<Item>();
                 int weaponIndex = item.value;
                 hasWeapons[weaponIndex] = true;
-
                 Destroy(nearObject);
             }
         }
@@ -292,16 +303,6 @@ public class Player : MonoBehaviour
         anim.SetBool("isWalk", moveVec != Vector3.zero);
     }
 
-    void Dead()
-    {
-        if (Health <= 0 || death == false)
-        {
-            anim.SetTrigger("Death");
-            death = true;
-            Health = 0;
-        }
-    }
-
     void FreezeRotation()
     {
         rigid.angularVelocity = Vector3.zero;
@@ -330,24 +331,19 @@ public class Player : MonoBehaviour
     {
         if (other.tag == "EnemyBullet")
         {
-            if (death)
-                return;
-            if (!isDamage)
+            if (!isDead)
             {
-                EnemyBullet enemybullet = other.GetComponent<EnemyBullet>();
-                Health -= enemybullet.damage;
-                anim.SetTrigger("Damage");
-                StartCoroutine(OnDamage());
-
-                if (Health <= 0)
+                if (!isDamage)
                 {
-                    anim.SetTrigger("Death");
-                    death = true;
-                    Health = 0;
+                    EnemyBullet enemybullet = other.GetComponent<EnemyBullet>();
+                    Health -= enemybullet.damage;
+                    anim.SetTrigger("Damage");
+                    StartCoroutine(OnDamage());
                 }
             }
+
         }
-        if(other.tag == "End")
+        if (other.tag == "End")
         {
             SceneManager.LoadScene("Ending");
         }
@@ -360,6 +356,20 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         isDamage = false;
+
+        if (Health <= 0)
+            OnDie();
+    }
+
+    void OnDie()
+    {
+
+        if (!isDead)
+        {
+            anim.SetTrigger("Death");
+            isDead = true;
+        }
+        deathTime -= Time.deltaTime;
     }
 
     void OnTriggerStay(Collider other)
